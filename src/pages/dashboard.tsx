@@ -1,3 +1,5 @@
+import { HeatmapCalendar } from "@/components/heatmap-calendar";
+
 export default function Dashboard() {
-  return <>Dashboard</>;
+  return <HeatmapCalendar />;
 }
