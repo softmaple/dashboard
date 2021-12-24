@@ -1,21 +1,25 @@
-import { RepoType } from "@/types";
-import { getModelForClass, prop } from "@typegoose/typegoose";
-import { Base, TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
+import { Schema, models, model } from "mongoose";
 
-interface Clone extends Base {}
+const cloneSchema = new Schema(
+  {
+    name: {
+      required: true,
+      type: String,
+    },
+    timestamp: {
+      type: String,
+      default: new Date().toISOString(),
+    },
+    count: {
+      type: Number,
+      default: 0,
+    },
+    uniques: {
+      type: Number,
+      default: 0,
+    },
+  },
+  { timestamps: true }
+);
 
-class Clone extends TimeStamps {
-  @prop({ enum: RepoType, required: true })
-  name: RepoType;
-
-  @prop({ type: () => String, default: new Date().toISOString() })
-  timestamp: string;
-
-  @prop({ type: () => Number, default: 0 })
-  count: number;
-
-  @prop({ type: () => Number, default: 0 })
-  uniques: number;
-}
-
-export const CloneModel = getModelForClass(Clone);
+export default models.Clone || model("Clone", cloneSchema);
