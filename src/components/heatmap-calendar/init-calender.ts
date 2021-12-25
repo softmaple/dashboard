@@ -71,8 +71,7 @@ export const initCalendar = (
 
     sample.forEach((clone) =>
       data.push([
-        // TODO: new version of `echarts.time.format` has some bug, just use the old version
-        echarts.format.formatTime("yyyy-MM-dd", clone.timestamp),
+        echarts.time.format("{yyyy}-{MM}-{dd}", clone.timestamp, true),
         clone.count,
       ])
     );
