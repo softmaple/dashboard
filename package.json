@@ -34,7 +34,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.5",
-    "@babel/plugin-proposal-private-property-in-object": "^7.16.5",
     "@emotion/babel-plugin": "^11.7.1",
     "@storybook/addon-actions": "^6.4.9",
     "@storybook/addon-essentials": "^6.4.9",
