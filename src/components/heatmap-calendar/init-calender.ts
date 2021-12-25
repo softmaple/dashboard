@@ -63,6 +63,9 @@ export const initCalendar = (
     (clone) => clone.name === RepoType["EORG"]
   );
 
+  const max =
+    realData.length > 0 ? Math.max(...realData.map((clone) => clone.count)) : 1;
+
   function getRealData(year: string, sample: Clone[]) {
     let data = [];
 
@@ -91,11 +94,11 @@ export const initCalendar = (
     visualMap: {
       show: false,
       min: 0,
-      max: 10000,
+      max,
     },
     calendar: {
       range: "2021",
-      cellSize: ["auto", 13],
+      cellSize: ["auto", 10],
     },
     series: {
       type: "heatmap",
