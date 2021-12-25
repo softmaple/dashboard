@@ -1,43 +1,79 @@
 import * as echarts from "echarts/core";
 import {
+  TitleComponent,
+  TitleComponentOption,
   CalendarComponent,
   CalendarComponentOption,
+  TooltipComponent,
+  TooltipComponentOption,
   VisualMapComponent,
   VisualMapComponentOption,
 } from "echarts/components";
 import { HeatmapChart, HeatmapSeriesOption } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
+import type { HeatmapCalendarProps } from "./heatmap-calendar";
+import { RepoType } from "@/types";
+import type { Clone } from "@/types";
 
 echarts.use([
+  TitleComponent,
   CalendarComponent,
+  TooltipComponent,
   VisualMapComponent,
   HeatmapChart,
   CanvasRenderer,
 ]);
 
 type EChartsOption = echarts.ComposeOption<
-  CalendarComponentOption | VisualMapComponentOption | HeatmapSeriesOption
+  | TitleComponentOption
+  | CalendarComponentOption
+  | TooltipComponentOption
+  | VisualMapComponentOption
+  | HeatmapSeriesOption
 >;
 
-/**
- * An example from https://echarts.apache.org/examples/en/editor.html?c=calendar-simple&lang=ts
- * @param chartDom
- */
-export const initCalendar = (chartDom: HTMLDivElement) => {
-  const myChart = echarts.init(chartDom);
+// TODO: remove this when the feature is stable
+const dummyData: HeatmapCalendarProps = {
+  clones: [
+    {
+      _id: "dummy_id",
+      name: RepoType.EORG,
+      timestamp: "2021-01-01",
+      count: 1,
+      uniques: 1,
+    },
+  ],
+};
 
-  function getVirtulData(year: string) {
-    year = year || "2017";
-    var date = +echarts.number.parseDate(year + "-01-01");
-    var end = +echarts.number.parseDate(year + "-12-31");
-    var dayTime = 3600 * 24 * 1000;
-    var data = [];
-    for (var time = date; time <= end; time += dayTime) {
+/**
+ * TODO: description
+ *
+ * @param chartDom HTMLDivElement
+ * @param sampleData HeatmapCalendarProps
+ */
+export const initCalendar = (
+  chartDom: HTMLDivElement,
+  sampleData: HeatmapCalendarProps
+) => {
+  const myChart = echarts.init(chartDom);
+  const title: RepoType = RepoType["EORG"];
+
+  // TODO: add more repo data
+  const realData = sampleData.clones.filter(
+    (clone) => clone.name === RepoType["EORG"]
+  );
+
+  function getRealData(year: string, sample: Clone[]) {
+    let data = [];
+
+    sample.forEach((clone) =>
       data.push([
-        echarts.format.formatTime("yyyy-MM-dd", time),
-        Math.floor(Math.random() * 10000),
-      ]);
-    }
+        // TODO: new version of `echarts.time.format` has some bug, just use the old version
+        echarts.format.formatTime("yyyy-MM-dd", clone.timestamp),
+        clone.count,
+      ])
+    );
+
     return data;
   }
 
@@ -46,19 +82,28 @@ export const initCalendar = (chartDom: HTMLDivElement) => {
    * the default color from echarts is good (maple leaf color)
    */
   const option: EChartsOption = {
+    title: {
+      top: 10,
+      left: "center",
+      text: `${title} repo git clones`,
+    },
+    tooltip: {},
     visualMap: {
       show: false,
       min: 0,
       max: 10000,
     },
     calendar: {
-      range: "2017",
+      range: "2021",
+      cellSize: ["auto", 13],
     },
     series: {
       type: "heatmap",
       coordinateSystem: "calendar",
-      // data: [["2017-01-01", 9]],
-      data: getVirtulData("2017"),
+      data: getRealData(
+        "2021",
+        realData.length > 0 ? realData : dummyData.clones
+      ),
     },
   };
 

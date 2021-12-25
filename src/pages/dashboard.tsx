@@ -1,22 +1,31 @@
+import type { Clone, View } from "@/types";
 import dbConnect from "@/lib/db-connect";
-import Clone from "@/models/clone";
-import View from "@/models/view";
+import CloneModel from "@/models/clone";
+import ViewModel from "@/models/view";
 import { HeatmapCalendar } from "@/components/heatmap-calendar";
-import { GetStaticProps } from "next";
+import type { GetStaticProps } from "next";
 
 type DashboardProps = {
-  clones: any;
-  views: any;
+  clones: Clone[];
+  views: View[];
 };
 
 export default function Dashboard({ clones, views }: DashboardProps) {
-  return <HeatmapCalendar />;
+  return <HeatmapCalendar clones={clones} />;
 }
 
+/**
+ * This function gets called at build time on server-side.
+ * It won't be called on client-side, so you can even do
+ * direct database queries.
+ *
+ * @see https://nextjs.org/docs/basic-features/data-fetching#technical-details
+ */
 export const getStaticProps: GetStaticProps = async () => {
+  // TODO: optimize this, need error handler or try/catch
   await dbConnect();
 
-  const originClones = await Clone.find(
+  const originClones = await CloneModel.find(
     {},
     // exclude createdAt, updatedAt and __v fields
     {
@@ -26,7 +35,7 @@ export const getStaticProps: GetStaticProps = async () => {
     }
   );
 
-  const originViews = await View.find(
+  const originViews = await ViewModel.find(
     {},
     // exclude createdAt, updatedAt and __v fields
     {
