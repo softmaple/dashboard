@@ -32,19 +32,6 @@ type EChartsOption = echarts.ComposeOption<
   | HeatmapSeriesOption
 >;
 
-// TODO: remove this when the feature is stable
-const dummyData: HeatmapCalendarProps = {
-  clones: [
-    {
-      _id: "dummy_id",
-      name: RepoType.EORG,
-      timestamp: "2021-01-01",
-      count: 1,
-      uniques: 1,
-    },
-  ],
-};
-
 /**
  * TODO: description
  *
@@ -56,15 +43,24 @@ export const initCalendar = (
   sampleData: HeatmapCalendarProps
 ) => {
   const myChart = echarts.init(chartDom);
-  const title: RepoType = RepoType["EORG"];
 
-  // TODO: add more repo data
-  const realData = sampleData.clones.filter(
-    (clone) => clone.name === RepoType["EORG"]
+  const eorgData = sampleData.clones.filter(
+    (clone) => clone.name === RepoType.EORG
   );
 
-  const max =
-    realData.length > 0 ? Math.max(...realData.map((clone) => clone.count)) : 1;
+  const docsData = sampleData.clones.filter(
+    (clone) => clone.name === RepoType.DOCS
+  );
+
+  const editorData = sampleData.clones.filter(
+    (clone) => clone.name === RepoType.EDITOR
+  );
+
+  const max = Math.max(
+    ...eorgData.map((clone) => clone.count),
+    ...docsData.map((clone) => clone.count),
+    ...editorData.map((clone) => clone.count)
+  );
 
   function getRealData(year: string, sample: Clone[]) {
     let data = [];
@@ -84,29 +80,66 @@ export const initCalendar = (
    * the default color from echarts is good (maple leaf color)
    */
   const option: EChartsOption = {
-    title: {
-      top: 10,
-      left: "center",
-      text: `${title} repo git clones`,
-    },
+    title: [
+      {
+        top: 10,
+        left: "center",
+        text: RepoType.EORG,
+      },
+      {
+        top: 200,
+        left: "center",
+        text: RepoType.DOCS,
+      },
+      {
+        top: 400,
+        left: "center",
+        text: RepoType.EDITOR,
+      },
+    ],
     tooltip: {},
     visualMap: {
       show: false,
       min: 0,
       max,
+      orient: "horizontal",
     },
-    calendar: {
-      range: "2021",
-      cellSize: ["auto", 10],
-    },
-    series: {
-      type: "heatmap",
-      coordinateSystem: "calendar",
-      data: getRealData(
-        "2021",
-        realData.length > 0 ? realData : dummyData.clones
-      ),
-    },
+    calendar: [
+      {
+        range: "2021",
+        cellSize: ["auto", 10],
+      },
+      {
+        top: 260,
+        range: "2021",
+        cellSize: ["auto", 10],
+      },
+      {
+        top: 450,
+        range: "2021",
+        cellSize: ["auto", 10],
+      },
+    ],
+    series: [
+      {
+        type: "heatmap",
+        coordinateSystem: "calendar",
+        calendarIndex: 0,
+        data: getRealData("2021", eorgData),
+      },
+      {
+        type: "heatmap",
+        coordinateSystem: "calendar",
+        calendarIndex: 1,
+        data: getRealData("2021", docsData),
+      },
+      {
+        type: "heatmap",
+        coordinateSystem: "calendar",
+        calendarIndex: 2,
+        data: getRealData("2021", editorData),
+      },
+    ],
   };
 
   option && myChart.setOption(option);
