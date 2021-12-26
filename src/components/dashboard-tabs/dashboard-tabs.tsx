@@ -24,15 +24,15 @@ export const DashboardTabs: FC<DashboardTabsProps> = ({
   views,
   isDarkMode,
 }) => {
-  const [value, setValue] = useState(TAB.CLONES);
+  const [activeTab, setActiveTab] = useState<TAB>(TAB.CLONES);
 
-  const handleChange = (event: SyntheticEvent, newValue: TAB) => {
-    setValue(newValue);
+  const handleChange = (event: SyntheticEvent, newTab: TAB) => {
+    setActiveTab(newTab);
   };
 
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
-      <TabContext value={value}>
+      <TabContext value={activeTab}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange} aria-label="dashboard tabs">
             <Tab label="Clones" value={TAB.CLONES} />
