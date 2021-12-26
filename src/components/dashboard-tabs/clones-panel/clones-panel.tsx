@@ -1,26 +1,14 @@
-import styled from "@emotion/styled";
 import { FC, useEffect, useRef } from "react";
 import type { Clone } from "@/types";
 import { initCalendar } from "./init-calender";
+import { LightWrapper, DarkWrapper } from "../panel.style";
 
-const Wrapper = styled.div`
-  width: 600px;
-  height: 600px;
-`;
-
-const LightWrapper = styled(Wrapper)``;
-
-const DarkWrapper = styled(Wrapper)``;
-
-export type HeatmapCalendarProps = {
+export type ClonesPanelProps = {
   clones: Clone[];
   isDarkMode: boolean;
 };
 
-export const HeatmapCalendar: FC<HeatmapCalendarProps> = ({
-  clones,
-  isDarkMode,
-}) => {
+export const ClonesPanel: FC<ClonesPanelProps> = ({ clones, isDarkMode }) => {
   const lightWrapperRef = useRef<HTMLDivElement | null>(null);
   const darkWrapperRef = useRef<HTMLDivElement | null>(null);
 

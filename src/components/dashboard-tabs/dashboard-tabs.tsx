@@ -5,7 +5,13 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import type { Clone, View } from "@/types";
-import { HeatmapCalendar } from "@/components/heatmap-calendar";
+import { ClonesPanel } from "./clones-panel";
+import { ViewsPanel } from "./views-panel";
+
+enum TAB {
+  CLONES = "clones",
+  VIEWS = "views",
+}
 
 type DashboardTabsProps = {
   clones: Clone[];
@@ -18,25 +24,27 @@ export const DashboardTabs: FC<DashboardTabsProps> = ({
   views,
   isDarkMode,
 }) => {
-  const [value, setValue] = useState("1");
+  const [activeTab, setActiveTab] = useState<TAB>(TAB.CLONES);
 
-  const handleChange = (event: SyntheticEvent, newValue: string) => {
-    setValue(newValue);
+  const handleChange = (event: SyntheticEvent, newTab: TAB) => {
+    setActiveTab(newTab);
   };
 
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
-      <TabContext value={value}>
+      <TabContext value={activeTab}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange} aria-label="dashboard tabs">
-            <Tab label="Clones" value="1" />
-            <Tab label="Views" value="2" disabled />
+            <Tab label="Clones" value={TAB.CLONES} />
+            <Tab label="Views" value={TAB.VIEWS} />
           </TabList>
         </Box>
-        <TabPanel value="1">
-          <HeatmapCalendar clones={clones} isDarkMode={isDarkMode} />
+        <TabPanel value={TAB.CLONES}>
+          <ClonesPanel clones={clones} isDarkMode={isDarkMode} />
         </TabPanel>
-        <TabPanel value="2">{/* TODO: Views Display */}</TabPanel>
+        <TabPanel value={TAB.VIEWS}>
+          <ViewsPanel views={views} isDarkMode={isDarkMode} />
+        </TabPanel>
       </TabContext>
     </Box>
   );
