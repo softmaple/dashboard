@@ -42,7 +42,10 @@ export const initCalendar = (
   chartDom: HTMLDivElement,
   sampleData: HeatmapCalendarProps
 ) => {
-  const myChart = echarts.init(chartDom);
+  const myChart = echarts.init(
+    chartDom,
+    sampleData.isDarkMode ? "dark" : "light"
+  );
 
   const eorgData = sampleData.clones.filter(
     (clone) => clone.name === RepoType.EORG

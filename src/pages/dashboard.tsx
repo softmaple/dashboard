@@ -1,8 +1,12 @@
+import { useState } from "react";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import { MaterialUISwitch } from "@/components/material-ui-switch";
+import { DashboardTabs } from "@/components/dashboard-tabs";
 import type { Clone, View } from "@/types";
 import dbConnect from "@/lib/db-connect";
 import CloneModel from "@/models/clone";
 import ViewModel from "@/models/view";
-import { HeatmapCalendar } from "@/components/heatmap-calendar";
 import type { GetStaticProps } from "next";
 
 type DashboardProps = {
@@ -11,7 +15,24 @@ type DashboardProps = {
 };
 
 export default function Dashboard({ clones, views }: DashboardProps) {
-  return <HeatmapCalendar clones={clones} />;
+  // TODO: dark mode background: rgb(16, 12, 42);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  const onChange = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  return (
+    <>
+      <FormGroup>
+        <FormControlLabel
+          control={<MaterialUISwitch sx={{ m: 1 }} />}
+          label="Dark mode"
+          onChange={onChange}
+        />
+      </FormGroup>
+      <DashboardTabs clones={clones} views={views} isDarkMode={isDarkMode} />
+    </>
+  );
 }
 
 /**

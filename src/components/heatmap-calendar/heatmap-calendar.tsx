@@ -8,16 +8,31 @@ const Wrapper = styled.div`
   height: 600px;
 `;
 
+const LightWrapper = styled(Wrapper)``;
+
+const DarkWrapper = styled(Wrapper)``;
+
 export type HeatmapCalendarProps = {
   clones: Clone[];
+  isDarkMode: boolean;
 };
 
-export const HeatmapCalendar: FC<HeatmapCalendarProps> = ({ clones }) => {
-  const calendarRef = useRef<HTMLDivElement | null>(null);
+export const HeatmapCalendar: FC<HeatmapCalendarProps> = ({
+  clones,
+  isDarkMode,
+}) => {
+  const lightWrapperRef = useRef<HTMLDivElement | null>(null);
+  const darkWrapperRef = useRef<HTMLDivElement | null>(null);
+
+  const calendarRef = isDarkMode ? darkWrapperRef : lightWrapperRef;
 
   useEffect(() => {
-    initCalendar(calendarRef.current, { clones });
-  }, [clones]);
+    initCalendar(calendarRef.current, { clones, isDarkMode });
+  }, [calendarRef, clones, isDarkMode]);
 
-  return <Wrapper ref={calendarRef} />;
+  return isDarkMode ? (
+    <DarkWrapper ref={darkWrapperRef} />
+  ) : (
+    <LightWrapper ref={lightWrapperRef} />
+  );
 };
