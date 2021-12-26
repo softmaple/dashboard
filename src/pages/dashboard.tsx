@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { MaterialUISwitch } from "@/components/material-ui-switch";
@@ -15,23 +17,33 @@ type DashboardProps = {
 };
 
 export default function Dashboard({ clones, views }: DashboardProps) {
-  // TODO: dark mode background: rgb(16, 12, 42);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const onChange = () => {
     setIsDarkMode(!isDarkMode);
   };
 
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: isDarkMode ? "dark" : "light",
+        },
+      }),
+    [isDarkMode]
+  );
+
   return (
-    <>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       <FormGroup>
         <FormControlLabel
           control={<MaterialUISwitch sx={{ m: 1 }} />}
-          label="Dark mode"
+          label={isDarkMode ? "Dark Mode" : "Light Mode"}
           onChange={onChange}
         />
       </FormGroup>
       <DashboardTabs clones={clones} views={views} isDarkMode={isDarkMode} />
-    </>
+    </ThemeProvider>
   );
 }
 

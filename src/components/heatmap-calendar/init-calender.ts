@@ -33,31 +33,22 @@ type EChartsOption = echarts.ComposeOption<
 >;
 
 /**
- * TODO: description
+ * Init Echarts Heatmap Calendar
  *
  * @param chartDom HTMLDivElement
- * @param sampleData HeatmapCalendarProps
+ * @param param1 HeatmapCalendarProps
  */
 export const initCalendar = (
   chartDom: HTMLDivElement,
-  sampleData: HeatmapCalendarProps
+  { clones, isDarkMode }: HeatmapCalendarProps
 ) => {
-  const myChart = echarts.init(
-    chartDom,
-    sampleData.isDarkMode ? "dark" : "light"
-  );
+  const myChart = echarts.init(chartDom, isDarkMode ? "dark" : "light");
 
-  const eorgData = sampleData.clones.filter(
-    (clone) => clone.name === RepoType.EORG
-  );
+  const eorgData = clones.filter((clone) => clone.name === RepoType.EORG);
 
-  const docsData = sampleData.clones.filter(
-    (clone) => clone.name === RepoType.DOCS
-  );
+  const docsData = clones.filter((clone) => clone.name === RepoType.DOCS);
 
-  const editorData = sampleData.clones.filter(
-    (clone) => clone.name === RepoType.EDITOR
-  );
+  const editorData = clones.filter((clone) => clone.name === RepoType.EDITOR);
 
   const max = Math.max(
     ...eorgData.map((clone) => clone.count),
