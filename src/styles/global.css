@@ -1,0 +1,5 @@
+html,
+body {
+  /* TODO: should be fixed in issue-19 */
+  width: 100%;
+}
