@@ -1,8 +1,6 @@
 import { useState } from "react";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import { Layout } from "@/components/layout";
-import { MaterialUISwitch } from "@/components/material-ui-switch";
+import { SwitchUIButton } from "@/components/switch-ui-button";
 import { DashboardTabs } from "@/components/dashboard-tabs";
 import type { Clone, View } from "@/types";
 import dbConnect from "@/lib/db-connect";
@@ -17,19 +15,10 @@ type DashboardProps = {
 
 export default function Dashboard({ clones, views }: DashboardProps) {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
-  const onChange = () => {
-    setIsDarkMode(!isDarkMode);
-  };
 
   return (
     <Layout isDarkMode={isDarkMode}>
-      <FormGroup>
-        <FormControlLabel
-          control={<MaterialUISwitch sx={{ m: 1 }} />}
-          label={isDarkMode ? "Dark Mode" : "Light Mode"}
-          onChange={onChange}
-        />
-      </FormGroup>
+      <SwitchUIButton isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
       <DashboardTabs clones={clones} views={views} isDarkMode={isDarkMode} />
     </Layout>
   );

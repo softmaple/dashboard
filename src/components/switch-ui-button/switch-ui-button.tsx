@@ -1,7 +1,10 @@
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
+import { FC, ChangeEvent, Dispatch, SetStateAction } from "react";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
-export const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
   height: 34,
   padding: 7,
@@ -47,3 +50,27 @@ export const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     borderRadius: 20 / 2,
   },
 }));
+
+type SwitchUIButttonProps = {
+  isDarkMode: boolean;
+  setIsDarkMode: Dispatch<SetStateAction<boolean>>;
+};
+
+export const SwitchUIButton: FC<SwitchUIButttonProps> = ({
+  isDarkMode,
+  setIsDarkMode,
+}) => {
+  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  return (
+    <FormGroup>
+      <FormControlLabel
+        control={<MaterialUISwitch sx={{ m: 1 }} />}
+        label={isDarkMode ? "Dark Mode" : "Light Mode"}
+        onChange={onChange}
+      />
+    </FormGroup>
+  );
+};
