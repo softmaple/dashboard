@@ -29,8 +29,8 @@ export const DashboardTabs: FC<DashboardTabsProps> = ({
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange} aria-label="dashboard tabs">
-            <Tab label="Git Repo Clones" value="1" />
-            <Tab label="Git Repo Views" value="2" disabled />
+            <Tab label="Clones" value="1" />
+            <Tab label="Views" value="2" disabled />
           </TabList>
         </Box>
         <TabPanel value="1">
