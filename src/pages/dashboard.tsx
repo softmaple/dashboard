@@ -1,8 +1,11 @@
+import { useState } from "react";
+import { Layout } from "@/components/layout";
+import { SwitchUIButton } from "@/components/switch-ui-button";
+import { DashboardTabs } from "@/components/dashboard-tabs";
 import type { Clone, View } from "@/types";
 import dbConnect from "@/lib/db-connect";
 import CloneModel from "@/models/clone";
 import ViewModel from "@/models/view";
-import { HeatmapCalendar } from "@/components/heatmap-calendar";
 import type { GetStaticProps } from "next";
 
 type DashboardProps = {
@@ -11,7 +14,14 @@ type DashboardProps = {
 };
 
 export default function Dashboard({ clones, views }: DashboardProps) {
-  return <HeatmapCalendar clones={clones} />;
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+
+  return (
+    <Layout isDarkMode={isDarkMode}>
+      <SwitchUIButton isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+      <DashboardTabs clones={clones} views={views} isDarkMode={isDarkMode} />
+    </Layout>
+  );
 }
 
 /**
