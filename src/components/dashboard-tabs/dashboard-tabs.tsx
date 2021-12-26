@@ -5,7 +5,7 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import type { Clone, View } from "@/types";
-import { HeatmapCalendar } from "@/components/heatmap-calendar";
+import { ClonesPanel } from "./clones-panel";
 import { ViewsPanel } from "./views-panel";
 
 enum TAB {
@@ -40,7 +40,7 @@ export const DashboardTabs: FC<DashboardTabsProps> = ({
           </TabList>
         </Box>
         <TabPanel value={TAB.CLONES}>
-          <HeatmapCalendar clones={clones} isDarkMode={isDarkMode} />
+          <ClonesPanel clones={clones} isDarkMode={isDarkMode} />
         </TabPanel>
         <TabPanel value={TAB.VIEWS}>
           <ViewsPanel views={views} isDarkMode={isDarkMode} />

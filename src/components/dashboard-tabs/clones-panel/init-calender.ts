@@ -11,9 +11,9 @@ import {
 } from "echarts/components";
 import { HeatmapChart, HeatmapSeriesOption } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
-import type { HeatmapCalendarProps } from "./heatmap-calendar";
+import type { ClonesPanelProps } from "./clones-panel";
 import { RepoType } from "@/types";
-import type { Clone } from "@/types";
+import { getChartsData } from "../utils/get-charts-data";
 
 echarts.use([
   TitleComponent,
@@ -40,7 +40,7 @@ type EChartsOption = echarts.ComposeOption<
  */
 export const initCalendar = (
   chartDom: HTMLDivElement,
-  { clones, isDarkMode }: HeatmapCalendarProps
+  { clones, isDarkMode }: ClonesPanelProps
 ) => {
   const myChart = echarts.init(chartDom, isDarkMode ? "dark" : "light");
 
@@ -55,19 +55,6 @@ export const initCalendar = (
     ...docsData.map((clone) => clone.count),
     ...editorData.map((clone) => clone.count)
   );
-
-  function getRealData(year: string, sample: Clone[]) {
-    let data = [];
-
-    sample.forEach((clone) =>
-      data.push([
-        echarts.time.format("{yyyy}-{MM}-{dd}", clone.timestamp, true),
-        clone.count,
-      ])
-    );
-
-    return data;
-  }
 
   /**
    * TODO: integrate with data from server
@@ -119,19 +106,19 @@ export const initCalendar = (
         type: "heatmap",
         coordinateSystem: "calendar",
         calendarIndex: 0,
-        data: getRealData("2021", eorgData),
+        data: getChartsData("2021", eorgData),
       },
       {
         type: "heatmap",
         coordinateSystem: "calendar",
         calendarIndex: 1,
-        data: getRealData("2021", docsData),
+        data: getChartsData("2021", docsData),
       },
       {
         type: "heatmap",
         coordinateSystem: "calendar",
         calendarIndex: 2,
-        data: getRealData("2021", editorData),
+        data: getChartsData("2021", editorData),
       },
     ],
   };

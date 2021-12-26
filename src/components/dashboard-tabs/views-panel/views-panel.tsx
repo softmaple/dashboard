@@ -1,7 +1,7 @@
 import { FC, useRef, useEffect } from "react";
 import type { View } from "@/types";
 import { initLineChart } from "./init-line-chart";
-import { LightWrapper, DarkWrapper } from "../panel-wrapper";
+import { LightWrapper, DarkWrapper } from "../panel.style";
 
 export type ViewsPanelProps = {
   views: View[];
