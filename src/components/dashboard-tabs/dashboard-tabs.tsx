@@ -6,6 +6,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import type { Clone, View } from "@/types";
 import { HeatmapCalendar } from "@/components/heatmap-calendar";
+import { ViewsPanel } from "./views-panel";
 
 type DashboardTabsProps = {
   clones: Clone[];
@@ -30,13 +31,15 @@ export const DashboardTabs: FC<DashboardTabsProps> = ({
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange} aria-label="dashboard tabs">
             <Tab label="Clones" value="1" />
-            <Tab label="Views" value="2" disabled />
+            <Tab label="Views" value="2" />
           </TabList>
         </Box>
         <TabPanel value="1">
           <HeatmapCalendar clones={clones} isDarkMode={isDarkMode} />
         </TabPanel>
-        <TabPanel value="2">{/* TODO: Views Display */}</TabPanel>
+        <TabPanel value="2">
+          <ViewsPanel views={views} isDarkMode={isDarkMode} />
+        </TabPanel>
       </TabContext>
     </Box>
   );
