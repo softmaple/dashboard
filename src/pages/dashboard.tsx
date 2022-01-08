@@ -1,4 +1,8 @@
 import { useState } from "react";
+import styled from "@emotion/styled";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import Link from "@mui/material/Link";
+import type { GetStaticProps } from "next";
 import { Layout } from "@/components/layout";
 import { SwitchUIButton } from "@/components/switch-ui-button";
 import { DashboardTabs } from "@/components/dashboard-tabs";
@@ -6,7 +10,14 @@ import { Clone, RepoType, View } from "@/types";
 import dbConnect from "@/lib/db-connect";
 import CloneModel from "@/models/clone";
 import ViewModel from "@/models/view";
-import type { GetStaticProps } from "next";
+
+const StyledHeader = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  align-content: center;
+  gap: 1rem;
+`;
 
 type DashboardProps = {
   clones: Clone[];
@@ -18,7 +29,17 @@ export default function Dashboard({ clones, views }: DashboardProps) {
 
   return (
     <Layout isDarkMode={isDarkMode}>
-      <SwitchUIButton isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+      <StyledHeader>
+        <Link
+          href="https://github.com/SoftMaple/github-insights-view"
+          underline="none"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <GitHubIcon fontSize="large" color="action" />
+        </Link>
+        <SwitchUIButton isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+      </StyledHeader>
       <DashboardTabs clones={clones} views={views} isDarkMode={isDarkMode} />
     </Layout>
   );
