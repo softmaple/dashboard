@@ -1,7 +1,5 @@
 export enum RepoType {
-  "EORG" = "Eorg",
   "EDITOR" = "Editor",
-  "DOCS" = "docs",
 }
 
 export type Clone = {

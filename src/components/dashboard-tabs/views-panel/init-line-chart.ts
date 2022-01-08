@@ -36,18 +36,14 @@ export const initLineChart = (
 ) => {
   const myChart = echarts.init(chartDom, isDarkMode ? "dark" : "light");
 
-  const eorgData = views.filter((view) => view.name === RepoType.EORG);
-
-  // TODO: add more data
-
-  // const docsData = views.filter((view) => view.name === RepoType.DOCS);
-
-  // const editorData = views.filter((view) => view.name === RepoType.EDITOR);
+  const editorData = views.filter((view) => view.name === RepoType.EDITOR);
 
   const option: EChartsOption = {
     title: {
       left: "center",
-      text: RepoType.EORG,
+      text: RepoType.EDITOR,
+      backgroundColor: "rgb(223,157,131)",
+      link: "https://github.com/SoftMaple/Editor/",
     },
     xAxis: {
       type: "category",
@@ -57,7 +53,7 @@ export const initLineChart = (
     },
     series: {
       type: "line",
-      data: getChartsData("2021", eorgData),
+      data: getChartsData(editorData),
     },
     tooltip: {},
   };
