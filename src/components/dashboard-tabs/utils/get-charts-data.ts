@@ -3,7 +3,7 @@ import type { Clone, View } from "@/types";
 
 type Field = Clone | View;
 
-export function getChartsData(year: string, sample: Array<Field>) {
+export function getChartsData(sample: Array<Field>) {
   let data = [];
 
   sample.forEach((field: Field) =>

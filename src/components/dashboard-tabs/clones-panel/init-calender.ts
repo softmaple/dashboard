@@ -44,38 +44,21 @@ export const initCalendar = (
 ) => {
   const myChart = echarts.init(chartDom, isDarkMode ? "dark" : "light");
 
-  const eorgData = clones.filter((clone) => clone.name === RepoType.EORG);
-
-  const docsData = clones.filter((clone) => clone.name === RepoType.DOCS);
-
   const editorData = clones.filter((clone) => clone.name === RepoType.EDITOR);
 
-  const max = Math.max(
-    ...eorgData.map((clone) => clone.count),
-    ...docsData.map((clone) => clone.count),
-    ...editorData.map((clone) => clone.count)
-  );
+  const max = Math.max(...editorData.map((clone) => clone.count));
 
   /**
-   * TODO: integrate with data from server
    * the default color from echarts is good (maple leaf color)
    */
   const option: EChartsOption = {
     title: [
       {
-        top: 10,
-        left: "center",
-        text: RepoType.EORG,
-      },
-      {
-        top: 200,
-        left: "center",
-        text: RepoType.DOCS,
-      },
-      {
-        top: 400,
+        top: 0,
         left: "center",
         text: RepoType.EDITOR,
+        backgroundColor: "rgb(223,157,131)",
+        link: "https://github.com/SoftMaple/Editor/",
       },
     ],
     tooltip: {},
@@ -87,17 +70,7 @@ export const initCalendar = (
     },
     calendar: [
       {
-        range: "2021",
-        cellSize: ["auto", 10],
-      },
-      {
-        top: 260,
-        range: "2021",
-        cellSize: ["auto", 10],
-      },
-      {
-        top: 450,
-        range: "2021",
+        range: ["2021-12-25", "2022-12-31"],
         cellSize: ["auto", 10],
       },
     ],
@@ -105,20 +78,7 @@ export const initCalendar = (
       {
         type: "heatmap",
         coordinateSystem: "calendar",
-        calendarIndex: 0,
-        data: getChartsData("2021", eorgData),
-      },
-      {
-        type: "heatmap",
-        coordinateSystem: "calendar",
-        calendarIndex: 1,
-        data: getChartsData("2021", docsData),
-      },
-      {
-        type: "heatmap",
-        coordinateSystem: "calendar",
-        calendarIndex: 2,
-        data: getChartsData("2021", editorData),
+        data: getChartsData(editorData),
       },
     ],
   };

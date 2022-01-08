@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Layout } from "@/components/layout";
 import { SwitchUIButton } from "@/components/switch-ui-button";
 import { DashboardTabs } from "@/components/dashboard-tabs";
-import type { Clone, View } from "@/types";
+import { Clone, RepoType, View } from "@/types";
 import dbConnect from "@/lib/db-connect";
 import CloneModel from "@/models/clone";
 import ViewModel from "@/models/view";
@@ -36,24 +36,24 @@ export const getStaticProps: GetStaticProps = async () => {
   await dbConnect();
 
   const originClones = await CloneModel.find(
-    {},
+    { name: RepoType.EDITOR },
     // exclude createdAt, updatedAt and __v fields
     {
       createdAt: 0,
       updatedAt: 0,
       __v: 0,
     }
-  );
+  ).sort({ timestamp: 1 });
 
   const originViews = await ViewModel.find(
-    {},
+    { name: RepoType.EDITOR },
     // exclude createdAt, updatedAt and __v fields
     {
       createdAt: 0,
       updatedAt: 0,
       __v: 0,
     }
-  );
+  ).sort({ timestamp: 1 });
 
   const clones = originClones.map((doc) => {
     const clone = doc.toObject();
