@@ -49,7 +49,6 @@ export const initCalendar = (
   const max = Math.max(...editorData.map((clone) => clone.count));
 
   /**
-   * TODO: integrate with data from server
    * the default color from echarts is good (maple leaf color)
    */
   const option: EChartsOption = {
