@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "@emotion/styled";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Link from "@mui/material/Link";
-import type { GetStaticProps } from "next";
+import type { GetServerSideProps } from "next";
 import { Layout } from "@/components/layout";
 import { SwitchUIButton } from "@/components/switch-ui-button";
 import { DashboardTabs } from "@/components/dashboard-tabs";
@@ -18,13 +18,24 @@ const StyledHeader = styled.div`
   gap: 1rem;
 `;
 
-type DashboardProps = {
+type Data = {
   clones: Clone[];
   views: View[];
 };
 
-export default function Dashboard({ clones, views }: DashboardProps) {
+type DashboardProps = {
+  data: Data;
+  error: null | {};
+};
+
+export default function Dashboard({ data, error }: DashboardProps) {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+
+  if (error) {
+    return <div>Something wrong when retrieving data from db...</div>;
+  }
+
+  const { clones, views } = data;
 
   return (
     <Layout isDarkMode={isDarkMode}>
@@ -57,56 +68,56 @@ export default function Dashboard({ clones, views }: DashboardProps) {
   );
 }
 
-/**
- * This function gets called at build time on server-side.
- * It won't be called on client-side, so you can even do
- * direct database queries.
- *
- * @see https://nextjs.org/docs/basic-features/data-fetching#technical-details
- */
-export const getStaticProps: GetStaticProps = async () => {
-  // TODO: optimize this, need error handler or try/catch
-  await dbConnect();
+export const getServerSideProps: GetServerSideProps = async () => {
+  let data: Partial<Data> = {},
+    error = null;
 
-  const originClones = await CloneModel.find(
-    { name: RepoType.EDITOR },
-    // exclude createdAt, updatedAt and __v fields
-    {
-      createdAt: 0,
-      updatedAt: 0,
-      __v: 0,
-    }
-  ).sort({ timestamp: 1 });
+  try {
+    await dbConnect();
 
-  const originViews = await ViewModel.find(
-    { name: RepoType.EDITOR },
-    // exclude createdAt, updatedAt and __v fields
-    {
-      createdAt: 0,
-      updatedAt: 0,
-      __v: 0,
-    }
-  ).sort({ timestamp: 1 });
+    const originClones = await CloneModel.find(
+      { name: RepoType.EDITOR },
+      // exclude createdAt, updatedAt and __v fields
+      {
+        createdAt: 0,
+        updatedAt: 0,
+        __v: 0,
+      }
+    ).sort({ timestamp: 1 });
 
-  const clones = originClones.map((doc) => {
-    const clone = doc.toObject();
-    clone._id = clone._id.toString();
-    return clone;
-  });
+    const originViews = await ViewModel.find(
+      { name: RepoType.EDITOR },
+      // exclude createdAt, updatedAt and __v fields
+      {
+        createdAt: 0,
+        updatedAt: 0,
+        __v: 0,
+      }
+    ).sort({ timestamp: 1 });
 
-  const views = originViews.map((doc) => {
-    const view = doc.toObject();
-    view._id = view._id.toString();
-    return view;
-  });
+    const clones = originClones.map((doc) => {
+      const clone = doc.toObject();
+      clone._id = clone._id.toString();
+      return clone;
+    });
 
-  // console.log("clones: ", clones);
-  // console.log("views: ", views);
+    const views = originViews.map((doc) => {
+      const view = doc.toObject();
+      view._id = view._id.toString();
+      return view;
+    });
+
+    data.clones = clones;
+    data.views = views;
+  } catch (err) {
+    console.error(err);
+    error = JSON.stringify(err);
+  }
 
   return {
     props: {
-      clones,
-      views,
+      data,
+      error,
     },
   };
 };
