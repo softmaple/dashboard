@@ -14,8 +14,7 @@ import ViewModel from "@/models/view";
 const StyledHeader = styled.div`
   display: flex;
   justify-content: flex-end;
-  align-items: flex-end;
-  align-content: center;
+  align-items: center;
   gap: 1rem;
 `;
 
@@ -31,12 +30,25 @@ export default function Dashboard({ clones, views }: DashboardProps) {
     <Layout isDarkMode={isDarkMode}>
       <StyledHeader>
         <Link
+          href="https://website.softmaple.xyz/"
+          underline="none"
+          target="_blank"
+          rel="noreferrer"
+          style={{ marginLeft: "1rem", marginRight: "auto" }}
+        >
+          Homepage
+        </Link>
+        <Link
           href="https://github.com/SoftMaple/github-insights-view"
           underline="none"
           target="_blank"
           rel="noreferrer"
         >
-          <GitHubIcon fontSize="large" color="action" />
+          <GitHubIcon
+            fontSize="large"
+            color="action"
+            style={{ display: "block" }}
+          />
         </Link>
         <SwitchUIButton isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
       </StyledHeader>
