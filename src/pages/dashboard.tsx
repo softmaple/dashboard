@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "@emotion/styled";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Link from "@mui/material/Link";
-import type { GetStaticProps } from "next";
+import type { GetServerSideProps } from "next";
 import { Layout } from "@/components/layout";
 import { SwitchUIButton } from "@/components/switch-ui-button";
 import { DashboardTabs } from "@/components/dashboard-tabs";
@@ -57,14 +57,7 @@ export default function Dashboard({ clones, views }: DashboardProps) {
   );
 }
 
-/**
- * This function gets called at build time on server-side.
- * It won't be called on client-side, so you can even do
- * direct database queries.
- *
- * @see https://nextjs.org/docs/basic-features/data-fetching#technical-details
- */
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   // TODO: optimize this, need error handler or try/catch
   await dbConnect();
 
