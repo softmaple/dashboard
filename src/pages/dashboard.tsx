@@ -18,13 +18,24 @@ const StyledHeader = styled.div`
   gap: 1rem;
 `;
 
-type DashboardProps = {
+type Data = {
   clones: Clone[];
   views: View[];
 };
 
-export default function Dashboard({ clones, views }: DashboardProps) {
+type DashboardProps = {
+  data: Data;
+  error: null | {};
+};
+
+export default function Dashboard({ data, error }: DashboardProps) {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+
+  if (error) {
+    return <div>Something wrong when retrieving data from db...</div>;
+  }
+
+  const { clones, views } = data;
 
   return (
     <Layout isDarkMode={isDarkMode}>
@@ -58,48 +69,55 @@ export default function Dashboard({ clones, views }: DashboardProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  // TODO: optimize this, need error handler or try/catch
-  await dbConnect();
+  let data: Partial<Data> = {},
+    error = null;
 
-  const originClones = await CloneModel.find(
-    { name: RepoType.EDITOR },
-    // exclude createdAt, updatedAt and __v fields
-    {
-      createdAt: 0,
-      updatedAt: 0,
-      __v: 0,
-    }
-  ).sort({ timestamp: 1 });
+  try {
+    await dbConnect();
 
-  const originViews = await ViewModel.find(
-    { name: RepoType.EDITOR },
-    // exclude createdAt, updatedAt and __v fields
-    {
-      createdAt: 0,
-      updatedAt: 0,
-      __v: 0,
-    }
-  ).sort({ timestamp: 1 });
+    const originClones = await CloneModel.find(
+      { name: RepoType.EDITOR },
+      // exclude createdAt, updatedAt and __v fields
+      {
+        createdAt: 0,
+        updatedAt: 0,
+        __v: 0,
+      }
+    ).sort({ timestamp: 1 });
 
-  const clones = originClones.map((doc) => {
-    const clone = doc.toObject();
-    clone._id = clone._id.toString();
-    return clone;
-  });
+    const originViews = await ViewModel.find(
+      { name: RepoType.EDITOR },
+      // exclude createdAt, updatedAt and __v fields
+      {
+        createdAt: 0,
+        updatedAt: 0,
+        __v: 0,
+      }
+    ).sort({ timestamp: 1 });
 
-  const views = originViews.map((doc) => {
-    const view = doc.toObject();
-    view._id = view._id.toString();
-    return view;
-  });
+    const clones = originClones.map((doc) => {
+      const clone = doc.toObject();
+      clone._id = clone._id.toString();
+      return clone;
+    });
 
-  // console.log("clones: ", clones);
-  // console.log("views: ", views);
+    const views = originViews.map((doc) => {
+      const view = doc.toObject();
+      view._id = view._id.toString();
+      return view;
+    });
+
+    data.clones = clones;
+    data.views = views;
+  } catch (err) {
+    console.error(err);
+    error = JSON.stringify(err);
+  }
 
   return {
     props: {
-      clones,
-      views,
+      data,
+      error,
     },
   };
 };
