@@ -7,7 +7,6 @@ const StyledHeader = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 1rem;
 `;
 
 type HeaderProps = {
