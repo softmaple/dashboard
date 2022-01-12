@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { useState, SyntheticEvent, FC } from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -6,7 +7,10 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import type { Clone, View } from "@/types";
 import { ClonesPanel } from "./clones-panel";
-import { ViewsPanel } from "./views-panel";
+
+const ViewsPanel = dynamic(() =>
+  import("./views-panel").then((mod) => mod.ViewsPanel)
+);
 
 enum TAB {
   CLONES = "clones",
