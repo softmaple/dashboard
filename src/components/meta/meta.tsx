@@ -25,6 +25,8 @@ export const Meta = () => {
         name="description"
         content="Dashboard for track insights of SoftMaple Editor."
       />
+      <meta name="viewport" content="width=device-width" />
+      <meta charSet="utf-8" />
       <title>SoftMaple Dashboard</title>
     </Head>
   );
