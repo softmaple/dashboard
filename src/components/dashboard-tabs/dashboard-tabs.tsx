@@ -7,15 +7,7 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import type { Clone, View } from "@/types";
-
-const ClonesPanel = dynamic(
-  () => import("./clones-panel").then((mod) => mod.ClonesPanel),
-  {
-    loading: () => (
-      <Skeleton variant="rectangular" width="600px" height="600px" />
-    ),
-  }
-);
+import { ClonesPanel } from "./clones-panel";
 
 const ViewsPanel = dynamic(
   () => import("./views-panel").then((mod) => mod.ViewsPanel),
