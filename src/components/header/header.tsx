@@ -23,13 +23,14 @@ export const Header: FC<HeaderProps> = ({ children }) => {
         rel="noreferrer"
         style={{ marginLeft: "1rem", marginRight: "auto" }}
       >
-        Homepage
+        SoftMaple
       </Link>
       <Link
         href="https://github.com/SoftMaple/github-insights-view"
         underline="none"
         target="_blank"
         rel="noreferrer"
+        aria-label="Github"
       >
         <GitHubIcon
           fontSize="large"
