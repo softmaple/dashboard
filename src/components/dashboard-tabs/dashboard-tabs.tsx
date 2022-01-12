@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { useState, SyntheticEvent, FC } from "react";
+import Skeleton from "@mui/material/Skeleton";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -8,8 +9,13 @@ import TabPanel from "@mui/lab/TabPanel";
 import type { Clone, View } from "@/types";
 import { ClonesPanel } from "./clones-panel";
 
-const ViewsPanel = dynamic(() =>
-  import("./views-panel").then((mod) => mod.ViewsPanel)
+const ViewsPanel = dynamic(
+  () => import("./views-panel").then((mod) => mod.ViewsPanel),
+  {
+    loading: () => (
+      <Skeleton variant="rectangular" width="600px" height="600px" />
+    ),
+  }
 );
 
 enum TAB {
