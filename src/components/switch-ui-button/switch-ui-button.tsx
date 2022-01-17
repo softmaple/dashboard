@@ -69,7 +69,7 @@ export const SwitchUIButton: FC<SwitchUIButttonProps> = ({
       <FormControlLabel
         control={<MaterialUISwitch sx={{ m: 1 }} />}
         label={isDarkMode ? "Dark Mode" : "Light Mode"}
-        sx={{ justifyContent: "flex-end", marginLeft: "1rem" }}
+        sx={{ justifyContent: "flex-end", marginLeft: 0 }}
         onChange={onChange}
       />
     </FormGroup>

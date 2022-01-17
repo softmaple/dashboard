@@ -17,16 +17,25 @@ export const Header: FC<HeaderProps> = ({ children }) => {
   return (
     <StyledHeader>
       <Link
-        href="https://website.softmaple.xyz/"
+        href="https://docs.softmaple.xyz/"
         underline="none"
         target="_blank"
         rel="noreferrer"
-        style={{ marginLeft: "1rem", marginRight: "auto" }}
+        sx={{ marginLeft: "1rem", marginRight: "auto" }}
       >
         SoftMaple
       </Link>
       <Link
-        href="https://github.com/SoftMaple/github-insights-view"
+        href="https://app.splitbee.io/public/softmaple.xyz"
+        underline="none"
+        target="_blank"
+        rel="noreferrer"
+        sx={{ marginRight: "1rem" }}
+      >
+        Splitbee
+      </Link>
+      <Link
+        href="https://github.com/SoftMaple/dashboard"
         underline="none"
         target="_blank"
         rel="noreferrer"
