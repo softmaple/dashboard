@@ -13,7 +13,7 @@ const ViewsPanel = dynamic(
   () => import("./views-panel").then((mod) => mod.ViewsPanel),
   {
     loading: () => (
-      <Skeleton variant="rectangular" width="600px" height="600px" />
+      <Skeleton variant="rectangular" width="600px" height="300px" />
     ),
   }
 );
