@@ -4,10 +4,7 @@ import { Layout } from "@/components/layout";
 import { Header } from "@/components/header";
 import { SwitchUIButton } from "@/components/switch-ui-button";
 import { DashboardTabs } from "@/components/dashboard-tabs";
-import { Clone, RepoType, View } from "@/types";
-import dbConnect from "@/lib/db-connect";
-import CloneModel from "@/models/clone";
-import ViewModel from "@/models/view";
+import type { Clone, View } from "@/types";
 
 type Data = {
   clones: Clone[];
@@ -23,7 +20,7 @@ export default function Dashboard({ data, error }: DashboardProps) {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
   if (error) {
-    return <div>Something wrong when retrieving data from db...</div>;
+    return <div>Something wrong when fetching data...</div>;
   }
 
   const { clones, views } = data;
@@ -38,50 +35,27 @@ export default function Dashboard({ data, error }: DashboardProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   let data: Partial<Data> = {},
     error = null;
 
+  const { host } = context.req.headers;
+
+  const origin =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : `https://${host}`;
+
   try {
-    await dbConnect();
+    await fetch(`${origin}/api/clones`)
+      .then((res) => res.json())
+      .then((res) => (data.clones = res.clones));
 
-    const originClones = await CloneModel.find(
-      { name: RepoType.EDITOR },
-      // exclude createdAt, updatedAt and __v fields
-      {
-        createdAt: 0,
-        updatedAt: 0,
-        __v: 0,
-      }
-    ).sort({ timestamp: 1 });
-
-    const originViews = await ViewModel.find(
-      { name: RepoType.EDITOR },
-      // exclude createdAt, updatedAt and __v fields
-      {
-        createdAt: 0,
-        updatedAt: 0,
-        __v: 0,
-      }
-    ).sort({ timestamp: 1 });
-
-    const clones = originClones.map((doc) => {
-      const clone = doc.toObject();
-      clone._id = clone._id.toString();
-      return clone;
-    });
-
-    const views = originViews.map((doc) => {
-      const view = doc.toObject();
-      view._id = view._id.toString();
-      return view;
-    });
-
-    data.clones = clones;
-    data.views = views;
+    await fetch(`${origin}/api/views`)
+      .then((res) => res.json())
+      .then((res) => (data.views = res.views));
   } catch (err) {
-    console.error(err);
-    error = JSON.stringify(err);
+    error = err.message;
   }
 
   return {
