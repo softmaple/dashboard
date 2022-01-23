@@ -1,10 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Model } from "mongoose";
+import { FilterQuery, Model } from "mongoose";
 import dbConnect from "@/lib/db-connect";
 
 export const advancedResults = async (
   model: Model<any>,
-  req: NextApiRequest
+  req: NextApiRequest,
+  filter: FilterQuery<any> = {}
 ) => {
   try {
     await dbConnect();
@@ -13,13 +14,9 @@ export const advancedResults = async (
       case "GET":
         const data = await model
           .find(
-            {},
-            // exclude createdAt, updatedAt and __v fields
-            {
-              createdAt: 0,
-              updatedAt: 0,
-              __v: 0,
-            }
+            { ...filter },
+            // just return the following fields
+            "_id name timestamp count uniques"
           )
           .sort({ timestamp: 1 });
 

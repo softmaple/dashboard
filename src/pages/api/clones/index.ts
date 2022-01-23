@@ -7,7 +7,10 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const clones = await advancedResults(CloneModel, req);
+    // filter: exclude the data that `count` field is 0
+    const clones = await advancedResults(CloneModel, req, {
+      count: { $gt: 0 },
+    });
 
     return res.status(200).json({ clones });
   } catch (err) {
