@@ -1,10 +1,11 @@
 import { useState } from "react";
 import type { GetServerSideProps } from "next";
+import type { Clone, View } from "@/types";
 import { Layout } from "@/components/layout";
 import { Header } from "@/components/header";
 import { SwitchUIButton } from "@/components/switch-ui-button";
 import { DashboardTabs } from "@/components/dashboard-tabs";
-import type { Clone, View } from "@/types";
+import { Footer } from "@/components/footer";
 
 type Data = {
   clones: Clone[];
@@ -31,6 +32,7 @@ export default function Dashboard({ data, error }: DashboardProps) {
         <SwitchUIButton isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
       </Header>
       <DashboardTabs clones={clones} views={views} isDarkMode={isDarkMode} />
+      <Footer isDarkMode={isDarkMode} />
     </Layout>
   );
 }
